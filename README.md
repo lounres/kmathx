@@ -55,3 +55,24 @@ Also the development is going only for JVM platform because of context receivers
 >
 > **Status.**
 > Right now no development is started because of waiting for polynomial support to be developed
+> 
+> **Reference.**
+> [Original realization](https://github.com/lounres/kotlin-test/tree/master/src/main/kotlin/math/varia/planimetricsCalculation).
+> But the main idea is greatly shown in [utilities](https://github.com/lounres/kotlin-test/blob/master/src/main/kotlin/math/varia/planimetricsCalculation/Util.kt).
+> For example [the euler line problem](https://en.wikipedia.org/wiki/Euler_line) may be proven with such code (in original style):
+> ```kotlin
+> // Define vertices of triangle △ABC:
+> val A by Point
+> val B by Point
+> val C by Point
+> 
+> // Compute △ABC's centroid, orthocenter and circumcenter:
+> val M = centroid(A, B, C)
+> val H = orthocenter(A, B, C)
+> val O = circumcenter(A, B, C)
+> 
+> // Check the collinearity of the points M, H and O:
+> collinearityCondition(A, B, C).isZero()
+> // Or in another way:
+> O.isLyingOn(lineThrough(M, H))
+> ```
