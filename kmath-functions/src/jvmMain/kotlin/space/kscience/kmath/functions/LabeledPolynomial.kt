@@ -326,6 +326,16 @@ fun <C, A: Ring<C>> Variable.asLabeledPolynomial() : LabeledPolynomial<C> = Labe
 context(LabeledPolynomialSpace<C, A>)
 fun <C, A: Ring<C>> Variable.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to ring.one))
 
+context(A)
+fun <C, A: Ring<C>> Variable.asLabeledPolynomial(c: C) : LabeledPolynomial<C> =
+    if(c.isZero()) LabeledPolynomial<C>(emptyMap())
+    else LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to c))
+
+context(LabeledPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> Variable.asLabeledPolynomial(c: C) : LabeledPolynomial<C> =
+    if(c.isZero()) zero
+    else LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to c))
+
 // endregion
 
 /**
