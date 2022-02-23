@@ -2,9 +2,9 @@
 Extra (mathematical) objects and algorithms for KMath.
 
 Mostly this is migration of my [simple math library](https://github.com/lounres/kotlin-test/tree/master/src/main/kotlin/math)
-on KMath support and ideology
+to KMath support and ideology
 
-Also the development is going only for JVM platform because of context receivers feature of Kotlin
+Also, the development mostly is going only for JVM platform because of context receivers feature of Kotlin
 
 ## Modules
 
@@ -17,8 +17,9 @@ Also the development is going only for JVM platform because of context receivers
 > - [operations](help/src/jvmMain/kotlin/space/kscience/kmath/operations) : Utilities for algebraic structures
 > 
 > **Status.**
-> The module is used for containing the most contextless utilities (like operations with collection). Hence, it
-> does not contain a lot of logic, and it's content may be changed any moment.
+> The module is used for containing the most contextless utilities (like operations with collection) that
+> do not contain a lot of logic, but are very needed and surprisingly (or just unfortunately) are not implemented in
+> correspondent library (Kotlin standard library, KMath, etc.).
 
 ---
 
@@ -59,7 +60,7 @@ Also the development is going only for JVM platform because of context receivers
 > **Reference.**
 > [Original realization](https://github.com/lounres/kotlin-test/tree/master/src/main/kotlin/math/varia/planimetricsCalculation).
 > But the main idea is greatly shown in [utilities](https://github.com/lounres/kotlin-test/blob/master/src/main/kotlin/math/varia/planimetricsCalculation/Util.kt).
-> For example [the euler line problem](https://en.wikipedia.org/wiki/Euler_line) may be proven with such code (in original style):
+> For example, [the euler line problem](https://en.wikipedia.org/wiki/Euler_line) may be proven with such code (in original style):
 > ```kotlin
 > // Define vertices of triangle △ABC:
 > val A by Point

@@ -29,6 +29,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api("space.kscience:kmath-core:$kmathVersion")
+                api(project(":help"))
+                api(project(":kmath-discrete"))
                 api(project(":kmath-functions"))
             }
         }
