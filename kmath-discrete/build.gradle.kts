@@ -11,6 +11,10 @@ kotlin {
                 jvmTarget = "11"
             }
         }
+
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
     }
 
     targets.all {

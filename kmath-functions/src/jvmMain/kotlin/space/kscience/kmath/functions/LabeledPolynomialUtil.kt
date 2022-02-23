@@ -409,12 +409,11 @@ fun <C> LabeledPolynomial<C>.substitute(ring: Ring<C>, args: Map<Variable, C>): 
     LabeledPolynomial<C>(
         buildMap {
             coefficients.forEach { (degs, c) ->
-                put(
-                    degs.filterKeys { it !in args },
-                    degs.entries.asSequence().filter { it.key in args }.fold(c) { acc, (variable, deg) ->
-                        multiplyWithPower(acc, args[variable]!!, deg)
-                    }
-                )
+                val newDegs = degs.filterKeys { it !in args }
+                val newC = degs.entries.asSequence().filter { it.key in args }.fold(c) { acc, (variable, deg) ->
+                    multiplyWithPower(acc, args[variable]!!, deg)
+                }
+                this[newDegs] = if (newDegs in this) this[newDegs]!! + newC else newC
             }
         }
     )

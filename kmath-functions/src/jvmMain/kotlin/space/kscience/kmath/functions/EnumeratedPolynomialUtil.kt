@@ -407,13 +407,12 @@ fun <C> EnumeratedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>): En
     EnumeratedPolynomial<C>(
         buildMap {
             coefficients.forEach { (degs, c) ->
-                put(
-                    degs.mapIndexed { index, deg -> if (index in args) 0U else deg }.cleanUp(),
-                    degs.foldIndexed(c) { index, acc, deg ->
-                        if (index in args) multiplyWithPower(acc, args[index]!!, deg)
-                        else acc
-                    }
-                )
+                val newDegs = degs.mapIndexed { index, deg -> if (index in args) 0U else deg }.cleanUp()
+                val newC = degs.foldIndexed(c) { index, acc, deg ->
+                    if (index in args) multiplyWithPower(acc, args[index]!!, deg)
+                    else acc
+                }
+                this[newDegs] = if (newDegs in this) this[newDegs]!! + newC else newC
             }
         }
     )

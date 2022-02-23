@@ -17,8 +17,8 @@ Also the development is going only for JVM platform because of context receivers
 > - [operations](help/src/jvmMain/kotlin/space/kscience/kmath/operations) : Utilities for algebraic structures
 > 
 > **Status.**
-> The module is used for containing most contextless utilities (like operations with collection). Hence, it
-> does not contain a lot of logic and it's content may be changed any moment.
+> The module is used for containing the most contextless utilities (like operations with collection). Hence, it
+> does not contain a lot of logic, and it's content may be changed any moment.
 
 ---
 

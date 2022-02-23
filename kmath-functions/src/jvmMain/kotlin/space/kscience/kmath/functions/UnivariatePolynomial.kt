@@ -396,7 +396,7 @@ class UnivariatePolynomialSpace<C, A : Ring<C>>(
 
     override val zero: UnivariatePolynomial<C> = UnivariatePolynomial(emptyList())
     override val one: UnivariatePolynomial<C> = UnivariatePolynomial(listOf(ring.one))
-    val x: UnivariatePolynomial<C> = UnivariatePolynomial(listOf(ring.one, ring.zero))
+    val x: UnivariatePolynomial<C> = UnivariatePolynomial(listOf(ring.zero, ring.one))
 
     // TODO: Docs
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
