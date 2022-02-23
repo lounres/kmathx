@@ -1,0 +1,10 @@
+# Project exclude paths
+/.gradle/
+/help/build/
+/help/build/classes/kotlin/jvm/main/
+/kmath-discrete/build/
+/kmath-discrete/build/classes/kotlin/jvm/main/
+/kmath-functions/build/
+/kmath-functions/build/classes/kotlin/jvm/main/
+/planimetric-calculations/build/
+/planimetric-calculations/build/classes/kotlin/jvm/main/
