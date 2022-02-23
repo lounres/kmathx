@@ -30,4 +30,36 @@ internal class LabeledPolynomialSpaceTest {
 
         assertEquals(Rational(1169), result)
     }
+    @Test
+    @OptIn(UnstableKMathAPI::class)
+    fun coolExpressionsFlex() {
+        val result =
+            RationalField.labeledPolynomialSpace {
+                val x by Variable
+                val y by Variable
+                val pol = 5 * x * x * y + 3 * y * y * y
+                pol(mapOf(
+                    x to Rational(-2), // x -> -2
+                    y to Rational(7), // y -> 7
+                )).asConstant()
+            }
+
+        assertEquals(Rational(1169), result)
+    }
+    @Test
+    @OptIn(UnstableKMathAPI::class)
+    fun beautifulExpressionsFlex() {
+        val result =
+            RationalField.labeledPolynomialSpace {
+                val x by Variable
+                val y by Variable
+                val pol = 5 * power(x, 2U) * y + 3 * power(y, 3U)
+                pol(mapOf(
+                    x to Rational(-2), // x -> -2
+                    y to Rational(7), // y -> 7
+                )).asConstant()
+            }
+
+        assertEquals(Rational(1169), result)
+    }
 }

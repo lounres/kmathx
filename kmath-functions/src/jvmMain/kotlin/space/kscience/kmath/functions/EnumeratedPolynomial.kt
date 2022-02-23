@@ -91,6 +91,8 @@ internal class EnumeratedPolynomialError(message: String): Error(message)
  */
 internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 
+// region Constructors and converters
+
 context(A)
 @Suppress("FunctionName")
 internal fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean): EnumeratedPolynomial<C> {
@@ -268,6 +270,10 @@ fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UInt>, C>>)
  */
 context(EnumeratedPolynomialSpace<C, A>)
 fun <C, A: Ring<C>> EnumeratedPolynomial(vararg pairs: Pair<List<UInt>, C>) = EnumeratedPolynomial(*pairs, toCheckInput = true)
+
+fun <C> C.asEnumeratedPolynomial() : EnumeratedPolynomial<C> = EnumeratedPolynomial<C>(mapOf(emptyList<UInt>() to this))
+
+// endregion
 
 /**
  * Space of polynomials.

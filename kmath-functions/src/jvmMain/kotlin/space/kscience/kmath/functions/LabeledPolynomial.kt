@@ -83,7 +83,250 @@ internal class LabeledPolynomialError: Error {
 /**
  * Returns the same degrees description of the monomial, but without zero degrees.
  */
-internal fun Map<Variable, Int>.cleanUp() = filterValues { it > 0 }
+internal fun Map<Variable, UInt>.cleanUp() = filterValues { it > 0U }
+
+// region Constructors and converters
+
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represent monomials.
+ * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(A)
+internal fun <C, A: Ring<C>> LabeledPolynomial(coefs: Map<Map<Variable, UInt>, C>, toCheckInput: Boolean = true): LabeledPolynomial<C> {
+    if (!toCheckInput) return LabeledPolynomial<C>(coefs)
+
+    // Map for cleaned coefficients.
+    val fixedCoefs = mutableMapOf<Map<Variable, UInt>, C>()
+
+    // Cleaning the degrees, summing monomials of the same degrees.
+    for (entry in coefs) {
+        val key = entry.key.cleanUp()
+        val value = entry.value
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    // Removing zero monomials.
+    return LabeledPolynomial<C>(
+        fixedCoefs
+            .filter { it.value.isNotZero() }
+    )
+}
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represent monomials.
+ * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(A)
+internal fun <C, A: Ring<C>> LabeledPolynomial(pairs: Collection<Pair<Map<Variable, UInt>, C>>, toCheckInput: Boolean): LabeledPolynomial<C> {
+    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
+
+    // Map for cleaned coefficients.
+    val fixedCoefs = mutableMapOf<Map<Variable, UInt>, C>()
+
+    // Cleaning the degrees, summing monomials of the same degrees.
+    for (entry in pairs) {
+        val key = entry.first.cleanUp()
+        val value = entry.second
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    // Removing zero monomials.
+    return LabeledPolynomial<C>(
+        fixedCoefs.filterValues { it.isNotZero() }
+    )
+}
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represents monomials.
+ * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(A)
+internal fun <C, A: Ring<C>> LabeledPolynomial(vararg pairs: Pair<Map<Variable, UInt>, C>, toCheckInput: Boolean): LabeledPolynomial<C> {
+    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
+
+    // Map for cleaned coefficients.
+    val fixedCoefs = mutableMapOf<Map<Variable, UInt>, C>()
+
+    // Cleaning the degrees, summing monomials of the same degrees.
+    for (entry in pairs) {
+        val key = entry.first.cleanUp()
+        val value = entry.second
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    // Removing zero monomials.
+    return LabeledPolynomial<C>(
+        fixedCoefs.filterValues { it.isNotZero() }
+    )
+}
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param coefs Coefficients of the instants.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(A)
+fun <C, A: Ring<C>> LabeledPolynomial(coefs: Map<Map<Variable, UInt>, C>): LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represents monomials.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(A)
+fun <C, A: Ring<C>> LabeledPolynomial(pairs: Collection<Pair<Map<Variable, UInt>, C>>): LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represents monomials.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(A)
+fun <C, A: Ring<C>> LabeledPolynomial(vararg pairs: Pair<Map<Variable, UInt>, C>): LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represent monomials.
+ * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(LabeledPolynomialSpace<C, A>)
+internal fun <C, A: Ring<C>> LabeledPolynomial(coefs: Map<Map<Variable, UInt>, C>, toCheckInput: Boolean = true): LabeledPolynomial<C> {
+    if (!toCheckInput) return LabeledPolynomial<C>(coefs)
+
+    // Map for cleaned coefficients.
+    val fixedCoefs = mutableMapOf<Map<Variable, UInt>, C>()
+
+    // Cleaning the degrees, summing monomials of the same degrees.
+    for (entry in coefs) {
+        val key = entry.key.cleanUp()
+        val value = entry.value
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    // Removing zero monomials.
+    return LabeledPolynomial<C>(
+        fixedCoefs
+            .filter { it.value.isNotZero() }
+    )
+}
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represent monomials.
+ * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(LabeledPolynomialSpace<C, A>)
+internal fun <C, A: Ring<C>> LabeledPolynomial(pairs: Collection<Pair<Map<Variable, UInt>, C>>, toCheckInput: Boolean): LabeledPolynomial<C> {
+    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
+
+    // Map for cleaned coefficients.
+    val fixedCoefs = mutableMapOf<Map<Variable, UInt>, C>()
+
+    // Cleaning the degrees, summing monomials of the same degrees.
+    for (entry in pairs) {
+        val key = entry.first.cleanUp()
+        val value = entry.second
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    // Removing zero monomials.
+    return LabeledPolynomial<C>(
+        fixedCoefs.filterValues { it.isNotZero() }
+    )
+}
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represents monomials.
+ * @param toCheckInput If it's `true` cleaning of [coefficients] is executed otherwise it is not.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(LabeledPolynomialSpace<C, A>)
+internal fun <C, A: Ring<C>> LabeledPolynomial(vararg pairs: Pair<Map<Variable, UInt>, C>, toCheckInput: Boolean): LabeledPolynomial<C> {
+    if (!toCheckInput) return LabeledPolynomial<C>(pairs.toMap())
+
+    // Map for cleaned coefficients.
+    val fixedCoefs = mutableMapOf<Map<Variable, UInt>, C>()
+
+    // Cleaning the degrees, summing monomials of the same degrees.
+    for (entry in pairs) {
+        val key = entry.first.cleanUp()
+        val value = entry.second
+        fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
+    }
+
+    // Removing zero monomials.
+    return LabeledPolynomial<C>(
+        fixedCoefs.filterValues { it.isNotZero() }
+    )
+}
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param coefs Coefficients of the instants.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(LabeledPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> LabeledPolynomial(coefs: Map<Map<Variable, UInt>, C>): LabeledPolynomial<C> = LabeledPolynomial(coefs, toCheckInput = true)
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represents monomials.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(LabeledPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> LabeledPolynomial(pairs: Collection<Pair<Map<Variable, UInt>, C>>): LabeledPolynomial<C> = LabeledPolynomial(pairs, toCheckInput = true)
+/**
+ * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from keys of received
+ * map, sums up proportional monomials, removes aero monomials, and if result is zero map adds only element in it.
+ *
+ * @param pairs Collection of pairs that represents monomials.
+ *
+ * @throws LabeledPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ */
+context(LabeledPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> LabeledPolynomial(vararg pairs: Pair<Map<Variable, UInt>, C>): LabeledPolynomial<C> = LabeledPolynomial(*pairs, toCheckInput = true)
+
+fun <C> C.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(emptyMap<Variable, UInt>() to this))
+
+context(A)
+fun <C, A: Ring<C>> Variable.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to one))
+
+context(LabeledPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> Variable.asLabeledPolynomial() : LabeledPolynomial<C> = LabeledPolynomial<C>(mapOf(mapOf<Variable, UInt>(this to 1U) to ring.one))
+
+// endregion
 
 /**
  * Space of polynomials.
@@ -140,6 +383,54 @@ class LabeledPolynomialSpace<C, A : Ring<C>>(
     override operator fun C.times(other: C): C = ring { this@times * other }
     // endregion
 
+    // region Constant-variable relation
+    operator fun C.plus(other: Variable): LabeledPolynomial<C> =
+        if (isZero()) LabeledPolynomial<C>(mapOf(
+            mapOf(other to 1U) to ring.one,
+        ))
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(other to 1U) to ring.one,
+            emptyMap<Variable, UInt>() to this@plus,
+        ))
+    operator fun C.minus(other: Variable): LabeledPolynomial<C> =
+        if (isZero()) LabeledPolynomial<C>(mapOf(
+            mapOf(other to 1U) to -ring.one,
+        ))
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(other to 1U) to -ring.one,
+            emptyMap<Variable, UInt>() to this@minus,
+        ))
+    operator fun C.times(other: Variable): LabeledPolynomial<C> =
+        if (isZero()) zero
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(other to 1U) to this@times,
+        ))
+    // endregion
+
+    // region Variable-constant relation
+    operator fun Variable.plus(other: C): LabeledPolynomial<C> =
+        if (other.isZero()) LabeledPolynomial<C>(mapOf(
+            mapOf(this@plus to 1U) to ring.one,
+        ))
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(this@plus to 1U) to ring.one,
+            emptyMap<Variable, UInt>() to other,
+        ))
+    operator fun Variable.minus(other: C): LabeledPolynomial<C> =
+        if (other.isZero()) LabeledPolynomial<C>(mapOf(
+            mapOf(this@minus to 1U) to -ring.one,
+        ))
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(this@minus to 1U) to -ring.one,
+            emptyMap<Variable, UInt>() to other,
+        ))
+    operator fun Variable.times(other: C): LabeledPolynomial<C> =
+        if (other.isZero()) zero
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(this@times to 1U) to other,
+        ))
+    // endregion
+
     // region Constant-polynomial relation
     override operator fun C.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (isZero()) other
@@ -150,7 +441,7 @@ class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .apply {
                         val key = emptyMap<Variable, UInt>()
                         if (key in this) {
-                            val res = this[key]!! + this@plus
+                            val res = this@plus + this[key]!!
                             if (res.isZero()) remove(key) else this[key] = res
                         } else {
                             this[key] = this@plus
@@ -161,17 +452,16 @@ class LabeledPolynomialSpace<C, A : Ring<C>>(
         if (isZero()) other
         else
             LabeledPolynomial<C>(
-                other.coefficients
-                    .toMutableMap()
-                    .apply {
-                        val key = emptyMap<Variable, UInt>()
-                        if (key in this) {
-                            val res = this[key]!! - this@minus
-                            if (res.isZero()) remove(key) else this[key] = res
-                        } else {
-                            this[key] = -this@minus
-                        }
+                buildMap(other.coefficients.size) {
+                    other.coefficients.mapValuesTo(this) { (_, c) -> -c }
+                    val key = emptyMap<Variable, UInt>()
+                    if (key in this) {
+                        val res = this@minus + this[key]!!
+                        if (res.isZero()) remove(key) else this[key] = res
+                    } else {
+                        this[key] = this@minus
                     }
+                }
             )
     override operator fun C.times(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
         if (isZero()) zero
@@ -179,7 +469,7 @@ class LabeledPolynomialSpace<C, A : Ring<C>>(
             LabeledPolynomial<C>(
                 other.coefficients
                     .asSequence()
-                    .map { (degs, c) -> degs to c * this@times }
+                    .map { (degs, c) -> degs to this@times * c }
                     .filter { (_, c) -> c.isNotZero() }
                     .toMap()
             )
@@ -237,6 +527,101 @@ class LabeledPolynomialSpace<C, A : Ring<C>>(
                     .filter { (_, c) -> c.isNotZero() }
                     .toMap()
             )
+    // endregion
+
+    // region Variable-variable relation
+    operator fun Variable.plus(other: Variable): LabeledPolynomial<C> =
+        if (this == other) LabeledPolynomial<C>(mapOf(
+            mapOf(this to 1U) to ring.one * 2
+        ))
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(this to 1U) to ring.one,
+            mapOf(other to 1U) to ring.one,
+        ))
+    operator fun Variable.minus(other: Variable): LabeledPolynomial<C> =
+        if (this == other) zero
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(this to 1U) to ring.one,
+            mapOf(other to 1U) to -ring.one,
+        ))
+    operator fun Variable.times(other: Variable): LabeledPolynomial<C> =
+        if (this == other) LabeledPolynomial<C>(mapOf(
+            mapOf(this to 2U) to ring.one
+        ))
+        else LabeledPolynomial<C>(mapOf(
+            mapOf(this to 1U, other to 1U) to ring.one,
+        ))
+    // endregion
+
+    // region Variable-polynomial relation
+    operator fun Variable.plus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
+        LabeledPolynomial<C>(
+            other.coefficients
+                .toMutableMap()
+                .apply {
+                    val key = mapOf(this@plus to 1U)
+                    if (key in this) {
+                        val res = this[key]!! + ring.one
+                        if (res.isZero()) remove(key) else this[key] = res
+                    } else {
+                        this[key] = ring.one
+                    }
+                }
+        )
+    operator fun Variable.minus(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
+        LabeledPolynomial<C>(
+            buildMap(other.coefficients.size) {
+                other.coefficients.mapValuesTo(this) { (_, c) -> -c }
+                val key = mapOf(this@minus to 1U)
+                if (key in this) {
+                    val res = ring.one + this[key]!!
+                    if (res.isZero()) remove(key) else this[key] = res
+                } else {
+                    this[key] = ring.one
+                }
+            }
+        )
+    operator fun Variable.times(other: LabeledPolynomial<C>): LabeledPolynomial<C> =
+        LabeledPolynomial<C>(
+            other.coefficients
+                .mapKeys { (degs, c) -> degs.toMutableMap().also{ it[this] = if (this in it) it[this]!! + 1U else 1U } }
+        )
+    // endregion
+
+    // region Polynomial-variable relation
+    operator fun LabeledPolynomial<C>.plus(other: Variable): LabeledPolynomial<C> =
+        LabeledPolynomial<C>(
+            coefficients
+                .toMutableMap()
+                .apply {
+                    val key = mapOf(other to 1U)
+                    if (key in this) {
+                        val res = this[key]!! + ring.one
+                        if (res.isZero()) remove(key) else this[key] = res
+                    } else {
+                        this[key] = ring.one
+                    }
+                }
+        )
+    operator fun LabeledPolynomial<C>.minus(other: Variable): LabeledPolynomial<C> =
+        LabeledPolynomial<C>(
+            coefficients
+                .toMutableMap()
+                .apply {
+                    val key = mapOf(other to 1U)
+                    if (key in this) {
+                        val res = this[key]!! - ring.one
+                        if (res.isZero()) remove(key) else this[key] = res
+                    } else {
+                        this[key] = -ring.one
+                    }
+                }
+        )
+    operator fun LabeledPolynomial<C>.times(other: Variable): LabeledPolynomial<C> =
+        LabeledPolynomial<C>(
+            coefficients
+                .mapKeys { (degs, c) -> degs.toMutableMap().also{ it[other] = if (other in it) it[other]!! + 1U else 1U } }
+        )
     // endregion
 
     // region Polynomial-polynomial relation

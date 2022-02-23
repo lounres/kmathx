@@ -65,7 +65,104 @@ context(LabeledPolynomialSpace<C, A>)
 fun <C, A: Ring<C>> numberConstant(value: Int): C = ring { number<C>(value) }
 
 context(LabeledPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> power(arg: C, pow: UInt): C = ring { power(arg, pow) }
+
+context(LabeledPolynomialSpace<C, A>)
 fun <C, A: Ring<C>> multiplyWithPower(base: C, arg: C, pow: UInt): C = ring { multiplyWithPower<C>(base, arg, pow) }
+
+// endregion
+
+// region Variables
+
+context(LabeledPolynomialSpace<C, A>)
+operator fun <C, A: Ring<C>> Variable.times(other: Int): LabeledPolynomial<C> =
+    if (other == 0) zero
+    else LabeledPolynomial<C>(mapOf(
+        mapOf(this@times to 1U) to numberConstant(other)
+    ))
+
+context(LabeledPolynomialSpace<C, A>)
+@Suppress("NOTHING_TO_INLINE")
+operator fun <C, A: Ring<C>> Int.times(other: Variable): LabeledPolynomial<C> =
+    if (this@times == 0) zero
+    else LabeledPolynomial<C>(mapOf(
+        mapOf(other to 1U) to numberConstant(this@times)
+    ))
+
+context(LabeledPolynomialSpace<C, A>)
+@Suppress("NOTHING_TO_INLINE")
+operator fun <C, A: Ring<C>> Variable.plus(other: Int): LabeledPolynomial<C> =
+    numberConstant(other).let {
+        if (it.isZero()) LabeledPolynomial<C>(
+            mapOf(
+                mapOf(this@plus to 1U) to ring.one
+            )
+        )
+        else LabeledPolynomial<C>(
+            mapOf(
+                mapOf(this@plus to 1U) to ring.one,
+                emptyMap<Variable, UInt>() to it,
+            )
+        )
+    }
+
+context(LabeledPolynomialSpace<C, A>)
+@Suppress("NOTHING_TO_INLINE")
+operator fun <C, A: Ring<C>> Int.plus(other: Variable): LabeledPolynomial<C> =
+    numberConstant(this@plus).let {
+        if (it.isZero()) LabeledPolynomial<C>(
+            mapOf(
+                mapOf(other to 1U) to ring.one
+            )
+        )
+        else LabeledPolynomial<C>(
+            mapOf(
+                mapOf(other to 1U) to ring.one,
+                emptyMap<Variable, UInt>() to it,
+            )
+        )
+    }
+
+context(LabeledPolynomialSpace<C, A>)
+@Suppress("NOTHING_TO_INLINE")
+operator fun <C, A: Ring<C>> Variable.minus(other: Int): LabeledPolynomial<C> =
+    numberConstant(-other).let {
+        if (it.isZero()) LabeledPolynomial<C>(
+            mapOf(
+                mapOf(this@minus to 1U) to ring.one
+            )
+        )
+        else LabeledPolynomial<C>(
+            mapOf(
+                mapOf(this@minus to 1U) to ring.one,
+                emptyMap<Variable, UInt>() to it,
+            )
+        )
+    }
+
+context(LabeledPolynomialSpace<C, A>)
+@Suppress("NOTHING_TO_INLINE")
+operator fun <C, A: Ring<C>> Int.minus(other: Variable): LabeledPolynomial<C> =
+    numberConstant(this@minus).let {
+        if (it.isZero()) LabeledPolynomial<C>(
+            mapOf(
+                mapOf(other to 1U) to -ring.one
+            )
+        )
+        else LabeledPolynomial<C>(
+            mapOf(
+                mapOf(other to 1U) to -ring.one,
+                emptyMap<Variable, UInt>() to it,
+            )
+        )
+    }
+
+context(LabeledPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> power(arg: Variable, pow: UInt): LabeledPolynomial<C> =
+    if (pow == 0U) one
+    else LabeledPolynomial<C>(mapOf(
+        mapOf(arg to pow) to ring.one
+    ))
 
 // endregion
 
