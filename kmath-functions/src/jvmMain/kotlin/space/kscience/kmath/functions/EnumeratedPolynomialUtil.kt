@@ -1,6 +1,5 @@
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.numberTheory.BezoutIdentityWithGCD
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.operations.isZero
 import kotlin.contracts.*
@@ -14,94 +13,94 @@ import kotlin.contracts.*
 
 // TODO: Reuse underlying ring extensions
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <C, A: Ring<C>> C.isZero() : Boolean = ring { this@isZero.isZero<C>() }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <C, A: Ring<C>> C.isNotZero() : Boolean = ring { this@isNotZero.isNotZero<C>() }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <C, A: Ring<C>> C.isOne() : Boolean = ring { this@isOne.isOne<C>() }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <C, A: Ring<C>> C.isNotOne() : Boolean = ring { this@isNotOne.isNotOne<C>() }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <C, A: Ring<C>> C.isMinusOne() : Boolean = ring { this@isMinusOne.isMinusOne<C>() }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <C, A: Ring<C>> C.isNotMinusOne() : Boolean = ring { this@isNotMinusOne.isNotMinusOne<C>() }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 operator fun <C, A: Ring<C>> C.times(other: Int): C = ring { this@times.times<C>(other) }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 operator fun <C, A: Ring<C>> Int.times(other: C): C = ring { this@times.times<C>(other) }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 operator fun <C, A: Ring<C>> C.plus(other: Int): C = ring { this@plus.plus<C>(other) }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 operator fun <C, A: Ring<C>> Int.plus(other: C): C = ring { this@plus.plus<C>(other) }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 operator fun <C, A: Ring<C>> C.minus(other: Int): C = ring { this@minus.minus<C>(other) }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 operator fun <C, A: Ring<C>> Int.minus(other: C): C = ring { this@minus.minus<C>(other) }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
 fun <C, A: Ring<C>> numberConstant(value: Int): C = ring { number<C>(value) }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 fun <C, A: Ring<C>> multiplyWithPower(base: C, arg: C, pow: UInt): C = ring { multiplyWithPower<C>(base, arg, pow) }
 
 // endregion
 
 // region Polynomials
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-inline fun <C, A: Ring<C>> EnumeratedPolynomial<C>.isZero() : Boolean = coefficients.isEmpty()
+inline fun <C, A: Ring<C>> NumberedPolynomial<C>.isZero() : Boolean = coefficients.isEmpty()
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-inline fun <C, A: Ring<C>> EnumeratedPolynomial<C>.isNotZero() : Boolean = coefficients.isNotEmpty()
+inline fun <C, A: Ring<C>> NumberedPolynomial<C>.isNotZero() : Boolean = coefficients.isNotEmpty()
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-inline fun <C, A: Ring<C>> EnumeratedPolynomial<C>.isOne() : Boolean =
+inline fun <C, A: Ring<C>> NumberedPolynomial<C>.isOne() : Boolean =
     with(coefficients) { size == 1 && entries.first().let { (key, value) -> key.isEmpty() && value.isOne() } }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-inline fun <C, A: Ring<C>> EnumeratedPolynomial<C>.isNotOne() : Boolean = !isOne<C, A>()
+inline fun <C, A: Ring<C>> NumberedPolynomial<C>.isNotOne() : Boolean = !isOne<C, A>()
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-inline fun <C, A: Ring<C>> EnumeratedPolynomial<C>.isMinusOne() : Boolean =
+inline fun <C, A: Ring<C>> NumberedPolynomial<C>.isMinusOne() : Boolean =
     with(coefficients) { size == 1 && entries.first().let { (key, value) -> key.isEmpty() && value.isMinusOne() } }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-inline fun <C, A: Ring<C>> EnumeratedPolynomial<C>.isNotMinusOne() : Boolean = !isMinusOne<C, A>()
+inline fun <C, A: Ring<C>> NumberedPolynomial<C>.isNotMinusOne() : Boolean = !isMinusOne<C, A>()
 
-context(EnumeratedPolynomialSpace<C, A>)
-operator fun <C, A: Ring<C>> EnumeratedPolynomial<C>.times(other: Int): EnumeratedPolynomial<C> =
+context(NumberedPolynomialSpace<C, A>)
+operator fun <C, A: Ring<C>> NumberedPolynomial<C>.times(other: Int): NumberedPolynomial<C> =
     if (other == 0) zero
-    else EnumeratedPolynomial<C>(
+    else NumberedPolynomial<C>(
         coefficients
             .asSequence()
             .map { (degs, c) -> degs to c * other }
@@ -109,11 +108,11 @@ operator fun <C, A: Ring<C>> EnumeratedPolynomial<C>.times(other: Int): Enumerat
             .toMap()
     )
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-operator fun <C, A: Ring<C>> Int.times(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
+operator fun <C, A: Ring<C>> Int.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
     if (this == 0) zero
-    else EnumeratedPolynomial<C>(
+    else NumberedPolynomial<C>(
         other.coefficients
             .asSequence()
             .map { (degs, c) -> degs to this@times * c }
@@ -121,13 +120,13 @@ operator fun <C, A: Ring<C>> Int.times(other: EnumeratedPolynomial<C>): Enumerat
             .toMap()
     )
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-operator fun <C, A: Ring<C>> EnumeratedPolynomial<C>.plus(other: Int): EnumeratedPolynomial<C> =
+operator fun <C, A: Ring<C>> NumberedPolynomial<C>.plus(other: Int): NumberedPolynomial<C> =
     if (other == 0) this
     else with(coefficients) {
-        if (isEmpty()) EnumeratedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(other)))
-        else EnumeratedPolynomial<C>(
+        if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(other)))
+        else NumberedPolynomial<C>(
             toMutableMap()
                 .apply {
                     if (emptyList() !in this) this[emptyList()] = numberConstant(other)
@@ -139,13 +138,13 @@ operator fun <C, A: Ring<C>> EnumeratedPolynomial<C>.plus(other: Int): Enumerate
         )
     }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-operator fun <C, A: Ring<C>> Int.plus(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
+operator fun <C, A: Ring<C>> Int.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
     if (this == 0) other
     else with(other.coefficients) {
-        if (isEmpty()) EnumeratedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(this@plus)))
-        else EnumeratedPolynomial<C>(
+        if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(this@plus)))
+        else NumberedPolynomial<C>(
             toMutableMap()
                 .apply {
                     if (emptyList() !in this) this[emptyList()] = numberConstant(this@plus)
@@ -157,13 +156,13 @@ operator fun <C, A: Ring<C>> Int.plus(other: EnumeratedPolynomial<C>): Enumerate
         )
     }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-operator fun <C, A: Ring<C>> EnumeratedPolynomial<C>.minus(other: Int): EnumeratedPolynomial<C> =
+operator fun <C, A: Ring<C>> NumberedPolynomial<C>.minus(other: Int): NumberedPolynomial<C> =
     if (other == 0) this
     else with(coefficients) {
-        if (isEmpty()) EnumeratedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(other)))
-        else EnumeratedPolynomial<C>(
+        if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(other)))
+        else NumberedPolynomial<C>(
             toMutableMap()
                 .apply {
                     if (emptyList() !in this) this[emptyList()] = numberConstant(-other)
@@ -175,13 +174,13 @@ operator fun <C, A: Ring<C>> EnumeratedPolynomial<C>.minus(other: Int): Enumerat
         )
     }
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("NOTHING_TO_INLINE")
-operator fun <C, A: Ring<C>> Int.minus(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
+operator fun <C, A: Ring<C>> Int.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
     if (this == 0) -other
     else with(other.coefficients) {
-        if (isEmpty()) EnumeratedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(this@minus)))
-        else EnumeratedPolynomial<C>(
+        if (isEmpty()) NumberedPolynomial<C>(mapOf(emptyList<UInt>() to numberConstant(this@minus)))
+        else NumberedPolynomial<C>(
             toMutableMap()
                 .apply {
                     forEach { (degs, c) -> if(degs.isNotEmpty()) this[degs] = -c }
@@ -194,11 +193,11 @@ operator fun <C, A: Ring<C>> Int.minus(other: EnumeratedPolynomial<C>): Enumerat
         )
     }
 
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> number(value: Int): EnumeratedPolynomial<C> = ring { EnumeratedPolynomial<C>(mapOf(emptyList<UInt>() to number<C>(value))) }
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> number(value: Int): NumberedPolynomial<C> = ring { NumberedPolynomial<C>(mapOf(emptyList<UInt>() to number<C>(value))) }
 
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> multiplyWithPower(base: EnumeratedPolynomial<C>, arg: EnumeratedPolynomial<C>, pow: UInt): EnumeratedPolynomial<C> =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> multiplyWithPower(base: NumberedPolynomial<C>, arg: NumberedPolynomial<C>, pow: UInt): NumberedPolynomial<C> =
     when {
         arg.isZero() && pow > 0U -> base
         arg.isOne() -> base
@@ -207,8 +206,8 @@ fun <C, A: Ring<C>> multiplyWithPower(base: EnumeratedPolynomial<C>, arg: Enumer
     }
 
 // Trivial but slow as duck
-context(EnumeratedPolynomialSpace<C, A>)
-internal tailrec fun <C, A: Ring<C>> multiplyWithPowerInternalLogic(base: EnumeratedPolynomial<C>, arg: EnumeratedPolynomial<C>, exponent: UInt): EnumeratedPolynomial<C> =
+context(NumberedPolynomialSpace<C, A>)
+internal tailrec fun <C, A: Ring<C>> multiplyWithPowerInternalLogic(base: NumberedPolynomial<C>, arg: NumberedPolynomial<C>, exponent: UInt): NumberedPolynomial<C> =
     when {
         exponent == 0U -> base
         exponent == 1U -> base * arg
@@ -225,9 +224,9 @@ internal tailrec fun <C, A: Ring<C>> multiplyWithPowerInternalLogic(base: Enumer
 
 // TODO: Docs
 @OptIn(ExperimentalContracts::class)
-inline fun <C, A : Ring<C>, R> A.enumeratedPolynomialSpace(block: EnumeratedPolynomialSpace<C, A>.() -> R): R {
+inline fun <C, A : Ring<C>, R> A.numberedPolynomialSpace(block: NumberedPolynomialSpace<C, A>.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return EnumeratedPolynomialSpace(this).block()
+    return NumberedPolynomialSpace(this).block()
 }
 
 // endregion
@@ -238,10 +237,10 @@ inline fun <C, A : Ring<C>, R> A.enumeratedPolynomialSpace(block: EnumeratedPoly
  * Represents the polynomial as a [String] where name of variable with index `i` is [withVariableName] + `"_${i+1}"`.
  * Consider that monomials are sorted in lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.represent(withVariableName: String = EnumeratedPolynomial.defaultVariableName): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.represent(withVariableName: String = NumberedPolynomial.defaultVariableName): String =
     coefficients.entries
-        .sortedWith { o1, o2 -> EnumeratedPolynomial.monomialComparator.compare(o1.key, o2.key) }
+        .sortedWith { o1, o2 -> NumberedPolynomial.monomialComparator.compare(o1.key, o2.key) }
         .asSequence()
         .map { (degs, t) ->
             if (degs.isEmpty()) "$t"
@@ -270,10 +269,10 @@ fun <C, A: Ring<C>> EnumeratedPolynomial<C>.represent(withVariableName: String =
  * Represents the polynomial as a [String] naming variables by [namer].
  * Consider that monomials are sorted in lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.represent(namer: (Int) -> String): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.represent(namer: (Int) -> String): String =
     coefficients.entries
-        .sortedWith { o1, o2 -> EnumeratedPolynomial.monomialComparator.compare(o1.key, o2.key) }
+        .sortedWith { o1, o2 -> NumberedPolynomial.monomialComparator.compare(o1.key, o2.key) }
         .asSequence()
         .map { (degs, t) ->
             if (degs.isEmpty()) "$t"
@@ -303,8 +302,8 @@ fun <C, A: Ring<C>> EnumeratedPolynomial<C>.represent(namer: (Int) -> String): S
  * and with brackets around the string if needed (i.e. when there are at least two addends in the representation).
  * Consider that monomials are sorted in lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representWithBrackets(withVariableName: String = EnumeratedPolynomial.defaultVariableName): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.representWithBrackets(withVariableName: String = NumberedPolynomial.defaultVariableName): String =
     with(represent(withVariableName)) { if (coefficients.count() == 1) this else "($this)" }
 
 /**
@@ -312,18 +311,18 @@ fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representWithBrackets(withVariableNa
  * (i.e. when there are at least two addends in the representation).
  * Consider that monomials are sorted in lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representWithBrackets(namer: (Int) -> String): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.representWithBrackets(namer: (Int) -> String): String =
     with(represent(namer)) { if (coefficients.count() == 1) this else "($this)" }
 
 /**
  * Represents the polynomial as a [String] where name of variable with index `i` is [withVariableName] + `"_${i+1}"`.
  * Consider that monomials are sorted in **reversed** lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representReversed(withVariableName: String = EnumeratedPolynomial.defaultVariableName): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.representReversed(withVariableName: String = NumberedPolynomial.defaultVariableName): String =
     coefficients.entries
-        .sortedWith { o1, o2 -> -EnumeratedPolynomial.monomialComparator.compare(o1.key, o2.key) }
+        .sortedWith { o1, o2 -> -NumberedPolynomial.monomialComparator.compare(o1.key, o2.key) }
         .asSequence()
         .map { (degs, t) ->
             if (degs.isEmpty()) "$t"
@@ -352,10 +351,10 @@ fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representReversed(withVariableName: 
  * Represents the polynomial as a [String] naming variables by [namer].
  * Consider that monomials are sorted in **reversed** lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representReversed(namer: (Int) -> String): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.representReversed(namer: (Int) -> String): String =
     coefficients.entries
-        .sortedWith { o1, o2 -> -EnumeratedPolynomial.monomialComparator.compare(o1.key, o2.key) }
+        .sortedWith { o1, o2 -> -NumberedPolynomial.monomialComparator.compare(o1.key, o2.key) }
         .asSequence()
         .map { (degs, t) ->
             if (degs.isEmpty()) "$t"
@@ -385,8 +384,8 @@ fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representReversed(namer: (Int) -> St
  * and with brackets around the string if needed (i.e. when there are at least two addends in the representation).
  * Consider that monomials are sorted in **reversed** lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representReversedWithBrackets(withVariableName: String = EnumeratedPolynomial.defaultVariableName): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.representReversedWithBrackets(withVariableName: String = NumberedPolynomial.defaultVariableName): String =
     with(representReversed(withVariableName)) { if (coefficients.count() == 1) this else "($this)" }
 
 /**
@@ -394,17 +393,17 @@ fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representReversedWithBrackets(withVa
  * (i.e. when there are at least two addends in the representation).
  * Consider that monomials are sorted in **reversed** lexicographic order.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial<C>.representReversedWithBrackets(namer: (Int) -> String): String =
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial<C>.representReversedWithBrackets(namer: (Int) -> String): String =
     with(representReversed(namer)) { if (coefficients.count() == 1) this else "($this)" }
 
 // endregion
 
 // region Polynomial substitution and functional representation
 
-fun <C> EnumeratedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>): EnumeratedPolynomial<C> = ring {
+fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>): NumberedPolynomial<C> = ring {
     if (coefficients.isEmpty()) return this@substitute
-    EnumeratedPolynomial<C>(
+    NumberedPolynomial<C>(
         buildMap {
             coefficients.forEach { (degs, c) ->
                 val newDegs = degs.mapIndexed { index, deg -> if (index in args) 0U else deg }.cleanUp()
@@ -421,14 +420,14 @@ fun <C> EnumeratedPolynomial<C>.substitute(ring: Ring<C>, args: Map<Int, C>): En
 // TODO: Replace with optimisation: the [result] may be unboxed, and all operations may be performed as soon as
 //  possible on it
 @JvmName("substitutePolynomial")
-fun <C> EnumeratedPolynomial<C>.substitute(ring: Ring<C>, arg: Map<Int, EnumeratedPolynomial<C>>) : EnumeratedPolynomial<C> =
-    ring.enumeratedPolynomialSpace {
+fun <C> NumberedPolynomial<C>.substitute(ring: Ring<C>, arg: Map<Int, NumberedPolynomial<C>>) : NumberedPolynomial<C> =
+    ring.numberedPolynomialSpace {
         if (coefficients.isEmpty()) return zero
         coefficients
             .asSequence()
             .map { (degs, c) ->
                 degs.foldIndexed(
-                    EnumeratedPolynomial(
+                    NumberedPolynomial(
                         degs.mapIndexed { index, deg -> if (index in arg) 0U else deg } to c
                     )
                 ) { index, acc, deg -> if (index in arg) multiplyWithPower(acc, arg[index]!!, deg) else acc }
@@ -438,10 +437,10 @@ fun <C> EnumeratedPolynomial<C>.substitute(ring: Ring<C>, arg: Map<Int, Enumerat
 
 // TODO: Substitute rational function
 
-fun <C, A : Ring<C>> EnumeratedPolynomial<C>.asFunctionOver(ring: A): (Map<Int, C>) -> EnumeratedPolynomial<C> =
+fun <C, A : Ring<C>> NumberedPolynomial<C>.asFunctionOver(ring: A): (Map<Int, C>) -> NumberedPolynomial<C> =
     { substitute(ring, it) }
 
-fun <C, A : Ring<C>> EnumeratedPolynomial<C>.asPolynomialFunctionOver(ring: A): (Map<Int, EnumeratedPolynomial<C>>) -> EnumeratedPolynomial<C> =
+fun <C, A : Ring<C>> NumberedPolynomial<C>.asPolynomialFunctionOver(ring: A): (Map<Int, NumberedPolynomial<C>>) -> NumberedPolynomial<C> =
     { substitute(ring, it) }
 
 // endregion

@@ -3,7 +3,6 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.common.*
 import kotlin.math.max
-import kotlin.math.min
 
 
 /**
@@ -17,9 +16,9 @@ import kotlin.math.min
  * received lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element
  * in it.
  *
- * @throws EnumeratedPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
+ * @throws NumberedPolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
-class EnumeratedPolynomial<C>
+class NumberedPolynomial<C>
 internal constructor(
     /**
      * Map that collects coefficients of the polynomial. Every non-zero monomial
@@ -49,7 +48,7 @@ internal constructor(
         /**
          * Default name of variables used in string representations.
          *
-         * @see EnumeratedPolynomial.toString
+         * @see NumberedPolynomial.toString
          */
         var defaultVariableName = "x"
 
@@ -75,16 +74,16 @@ internal constructor(
          * Represents result of division with remainder.
          */
         data class DividingResult<C>(
-            val quotient: EnumeratedPolynomial<C>,
-            val reminder: EnumeratedPolynomial<C>
+            val quotient: NumberedPolynomial<C>,
+            val reminder: NumberedPolynomial<C>
         )
     }
 }
 
 /**
- * Represents internal [EnumeratedPolynomial] errors.
+ * Represents internal [NumberedPolynomial] errors.
  */
-internal class EnumeratedPolynomialError(message: String): Error(message)
+internal class NumberedPolynomialError(message: String): Error(message)
 
 /**
  * Returns the same degrees description of the monomial, but without extra zero degrees on the end.
@@ -95,8 +94,8 @@ internal fun List<UInt>.cleanUp() = subList(0, indexOfLast { it != 0U } + 1)
 
 context(A)
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean): EnumeratedPolynomial<C> {
-    if (!toCheckInput) return EnumeratedPolynomial<C>(coefs)
+internal fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> {
+    if (!toCheckInput) return NumberedPolynomial<C>(coefs)
 
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
 
@@ -106,7 +105,7 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>, toC
         fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
     }
 
-    return EnumeratedPolynomial<C>(
+    return NumberedPolynomial<C>(
         fixedCoefs
             .filter { it.value.isNotZero() }
     )
@@ -122,8 +121,8 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>, toC
  */
 context(A)
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean): EnumeratedPolynomial<C> {
-    if (!toCheckInput) return EnumeratedPolynomial(pairs.toMap())
+internal fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean): NumberedPolynomial<C> {
+    if (!toCheckInput) return NumberedPolynomial(pairs.toMap())
 
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
 
@@ -133,7 +132,7 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UI
         fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
     }
 
-    return EnumeratedPolynomial<C>(
+    return NumberedPolynomial<C>(
         fixedCoefs
             .filter { it.value.isNotZero() }
     )
@@ -149,8 +148,8 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UI
  */
 context(A)
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> EnumeratedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean): EnumeratedPolynomial<C> =
-    EnumeratedPolynomial(pairs.toMap(), toCheckInput)
+internal fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> =
+    NumberedPolynomial(pairs.toMap(), toCheckInput)
 /**
  * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
  * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
@@ -160,7 +159,7 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(vararg pairs: Pair<List<UInt>,
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
 context(A)
-fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>) = EnumeratedPolynomial(coefs, toCheckInput = true)
+fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>) = NumberedPolynomial(coefs, toCheckInput = true)
 /**
  * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
  * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
@@ -170,7 +169,7 @@ fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>) = Enumerated
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
 context(A)
-fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) = EnumeratedPolynomial(pairs, toCheckInput = true)
+fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) = NumberedPolynomial(pairs, toCheckInput = true)
 /**
  * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
  * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
@@ -180,12 +179,12 @@ fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UInt>, C>>)
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
 context(A)
-fun <C, A: Ring<C>> EnumeratedPolynomial(vararg pairs: Pair<List<UInt>, C>) = EnumeratedPolynomial(*pairs, toCheckInput = true)
+fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) = NumberedPolynomial(*pairs, toCheckInput = true)
 
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean): EnumeratedPolynomial<C> {
-    if (!toCheckInput) return EnumeratedPolynomial(coefs)
+internal fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> {
+    if (!toCheckInput) return NumberedPolynomial(coefs)
 
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
 
@@ -195,7 +194,7 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>, toC
         fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
     }
 
-    return EnumeratedPolynomial<C>(
+    return NumberedPolynomial<C>(
         fixedCoefs
             .filter { it.value.isNotZero() }
     )
@@ -209,10 +208,10 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>, toC
  *
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean): EnumeratedPolynomial<C> {
-    if (!toCheckInput) return EnumeratedPolynomial(pairs.toMap())
+internal fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>, toCheckInput: Boolean): NumberedPolynomial<C> {
+    if (!toCheckInput) return NumberedPolynomial(pairs.toMap())
 
     val fixedCoefs = mutableMapOf<List<UInt>, C>()
 
@@ -222,7 +221,7 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UI
         fixedCoefs[key] = if (key in fixedCoefs) fixedCoefs[key]!! + value else value
     }
 
-    return EnumeratedPolynomial<C>(
+    return NumberedPolynomial<C>(
         fixedCoefs
             .filter { it.value.isNotZero() }
     )
@@ -236,10 +235,10 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UI
  *
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
-context(EnumeratedPolynomialSpace<C, A>)
+context(NumberedPolynomialSpace<C, A>)
 @Suppress("FunctionName")
-internal fun <C, A: Ring<C>> EnumeratedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean): EnumeratedPolynomial<C> =
-    EnumeratedPolynomial(pairs.toList(), toCheckInput)
+internal fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>, toCheckInput: Boolean): NumberedPolynomial<C> =
+    NumberedPolynomial(pairs.toList(), toCheckInput)
 /**
  * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
  * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
@@ -248,8 +247,8 @@ internal fun <C, A: Ring<C>> EnumeratedPolynomial(vararg pairs: Pair<List<UInt>,
  *
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>) = EnumeratedPolynomial(coefs, toCheckInput = true)
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial(coefs: Map<List<UInt>, C>) = NumberedPolynomial(coefs, toCheckInput = true)
 /**
  * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
  * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
@@ -258,8 +257,8 @@ fun <C, A: Ring<C>> EnumeratedPolynomial(coefs: Map<List<UInt>, C>) = Enumerated
  *
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) = EnumeratedPolynomial(pairs, toCheckInput = true)
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial(pairs: Collection<Pair<List<UInt>, C>>) = NumberedPolynomial(pairs, toCheckInput = true)
 /**
  * Gets the coefficients in format of [coefficients] field and cleans it: removes zero degrees from end of received
  * lists, sums up proportional monomials, removes zero monomials, and if result is empty map adds only element in it.
@@ -268,10 +267,10 @@ fun <C, A: Ring<C>> EnumeratedPolynomial(pairs: Collection<Pair<List<UInt>, C>>)
  *
  * @throws PolynomialError If no coefficient received or if any of degrees in any monomial is negative.
  */
-context(EnumeratedPolynomialSpace<C, A>)
-fun <C, A: Ring<C>> EnumeratedPolynomial(vararg pairs: Pair<List<UInt>, C>) = EnumeratedPolynomial(*pairs, toCheckInput = true)
+context(NumberedPolynomialSpace<C, A>)
+fun <C, A: Ring<C>> NumberedPolynomial(vararg pairs: Pair<List<UInt>, C>) = NumberedPolynomial(*pairs, toCheckInput = true)
 
-fun <C> C.asEnumeratedPolynomial() : EnumeratedPolynomial<C> = EnumeratedPolynomial<C>(mapOf(emptyList<UInt>() to this))
+fun <C> C.asNumberedPolynomial() : NumberedPolynomial<C> = NumberedPolynomial<C>(mapOf(emptyList<UInt>() to this))
 
 // endregion
 
@@ -283,9 +282,9 @@ fun <C> C.asEnumeratedPolynomial() : EnumeratedPolynomial<C> = EnumeratedPolynom
  * @param ring the [A] instance.
  */
 @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "INAPPLICABLE_JVM_NAME")
-class EnumeratedPolynomialSpace<C, A : Ring<C>>(
+class NumberedPolynomialSpace<C, A : Ring<C>>(
     val ring: A,
-) : PolynomialSpace<C, EnumeratedPolynomial<C>> {
+) : PolynomialSpace<C, NumberedPolynomial<C>> {
 
     // region Constant-integer relation
     // TODO: Очень хочется прибавлять/вычитать и умножать на целые числа, так как есть единственный (естественный) гомоморфизм
@@ -331,11 +330,11 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     // endregion
 
     // region Constant-polynomial relation
-    override operator fun C.plus(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
+    override operator fun C.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this.isZero()) other
         else with(other.coefficients) {
-            if (isEmpty()) EnumeratedPolynomial<C>(mapOf(listOf<UInt>() to this@plus))
-            else EnumeratedPolynomial<C>(
+            if (isEmpty()) NumberedPolynomial<C>(mapOf(listOf<UInt>() to this@plus))
+            else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
                         if (listOf() !in this) this[listOf()] = this@plus
@@ -346,11 +345,11 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
-    override operator fun C.minus(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
+    override operator fun C.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this.isZero()) -other
         else with(other.coefficients) {
-            if (isEmpty()) EnumeratedPolynomial<C>(mapOf(listOf<UInt>() to this@minus))
-            else EnumeratedPolynomial<C>(
+            if (isEmpty()) NumberedPolynomial<C>(mapOf(listOf<UInt>() to this@minus))
+            else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
                         forEach { (degs, c) -> if(degs.isNotEmpty()) this[degs] = -c }
@@ -362,9 +361,9 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
                     }
             )
         }
-    override operator fun C.times(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
+    override operator fun C.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         if (this.isZero()) zero
-        else EnumeratedPolynomial<C>(
+        else NumberedPolynomial<C>(
             other.coefficients
                 .asSequence()
                 .map { (degs, c) -> degs to this@times * c }
@@ -377,11 +376,11 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Returns sum of the polynomials. [other] is interpreted as [UnivariatePolynomial].
      */
-    override operator fun EnumeratedPolynomial<C>.plus(other: C): EnumeratedPolynomial<C> =
+    override operator fun NumberedPolynomial<C>.plus(other: C): NumberedPolynomial<C> =
         if (other.isZero()) this
         else with(coefficients) {
-            if (isEmpty()) EnumeratedPolynomial<C>(mapOf(listOf<UInt>() to other))
-            else EnumeratedPolynomial<C>(
+            if (isEmpty()) NumberedPolynomial<C>(mapOf(listOf<UInt>() to other))
+            else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
                         if (listOf() !in this) this[listOf()] = other
@@ -395,11 +394,11 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Returns difference of the polynomials. [other] is interpreted as [UnivariatePolynomial].
      */
-    override operator fun EnumeratedPolynomial<C>.minus(other: C): EnumeratedPolynomial<C> =
+    override operator fun NumberedPolynomial<C>.minus(other: C): NumberedPolynomial<C> =
         if (other.isZero()) this
         else with(coefficients) {
-            if (isEmpty()) EnumeratedPolynomial<C>(mapOf(listOf<UInt>() to other))
-            else EnumeratedPolynomial<C>(
+            if (isEmpty()) NumberedPolynomial<C>(mapOf(listOf<UInt>() to other))
+            else NumberedPolynomial<C>(
                 toMutableMap()
                     .apply {
                         if (listOf() !in this) this[listOf()] = -other
@@ -413,9 +412,9 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Returns product of the polynomials. [other] is interpreted as [UnivariatePolynomial].
      */
-    override operator fun EnumeratedPolynomial<C>.times(other: C): EnumeratedPolynomial<C> =
+    override operator fun NumberedPolynomial<C>.times(other: C): NumberedPolynomial<C> =
         if (other.isZero()) zero
-        else EnumeratedPolynomial<C>(
+        else NumberedPolynomial<C>(
             coefficients
                 .asSequence()
                 .map { (degs, c) -> degs to c * other }
@@ -428,15 +427,15 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Returns negation of the polynomial.
      */
-    override fun EnumeratedPolynomial<C>.unaryMinus(): EnumeratedPolynomial<C> =
-        EnumeratedPolynomial<C>(
+    override fun NumberedPolynomial<C>.unaryMinus(): NumberedPolynomial<C> =
+        NumberedPolynomial<C>(
             coefficients.mapValues { -it.value }
         )
     /**
      * Returns sum of the polynomials.
      */
-    override operator fun EnumeratedPolynomial<C>.plus(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
-        EnumeratedPolynomial<C>(
+    override operator fun NumberedPolynomial<C>.plus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
+        NumberedPolynomial<C>(
             coefficients
                 .toMutableMap()
                 .apply {
@@ -497,8 +496,8 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Returns difference of the polynomials.
      */
-    override operator fun EnumeratedPolynomial<C>.minus(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
-        EnumeratedPolynomial<C>(
+    override operator fun NumberedPolynomial<C>.minus(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
+        NumberedPolynomial<C>(
             coefficients
                 .toMutableMap()
                 .apply {
@@ -559,12 +558,12 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Returns product of the polynomials.
      */
-    override operator fun EnumeratedPolynomial<C>.times(other: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> =
+    override operator fun NumberedPolynomial<C>.times(other: NumberedPolynomial<C>): NumberedPolynomial<C> =
         when {
             isZero() -> this
             other.isZero() -> other
             else ->
-                EnumeratedPolynomial<C>(
+                NumberedPolynomial<C>(
                     buildMap<List<UInt>, C> {
                         for ((degs1, c1) in coefficients) for ((degs2, c2) in other.coefficients) {
                             val degs =
@@ -605,9 +604,9 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
 //                toCheckInput = false
 //            )
 
-    override val zero: EnumeratedPolynomial<C> = EnumeratedPolynomial<C>(emptyMap())
-    override val one: EnumeratedPolynomial<C> =
-        EnumeratedPolynomial<C>(
+    override val zero: NumberedPolynomial<C> = NumberedPolynomial<C>(emptyMap())
+    override val one: NumberedPolynomial<C> =
+        NumberedPolynomial<C>(
             mapOf(
                 listOf<UInt>() to ring.one // 1 * x_1^0 * x_2^0 * ...
             )
@@ -615,7 +614,7 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
 
     // TODO: Docs
     @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "CovariantEquals")
-    override fun EnumeratedPolynomial<C>.equals(other: EnumeratedPolynomial<C>): Boolean =
+    override fun NumberedPolynomial<C>.equals(other: NumberedPolynomial<C>): Boolean =
         when {
             this === other -> true
             else -> coefficients.size == other.coefficients.size &&
@@ -628,12 +627,12 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Count of all variables that appear in the polynomial in positive exponents.
      */
-    val EnumeratedPolynomial<C>.countOfVariables: Int get() = coefficients.keys.maxOfOrNull { it.size } ?: 0
+    val NumberedPolynomial<C>.countOfVariables: Int get() = coefficients.keys.maxOfOrNull { it.size } ?: 0
     /**
      * Degree of the polynomial, [see also](https://en.wikipedia.org/wiki/Degree_of_a_polynomial). If the polynomial is
      * zero, degree is -1.
      */
-    override val EnumeratedPolynomial<C>.degree: Int get() = coefficients.keys.maxOfOrNull { it.sum() }?.toInt() ?: -1
+    override val NumberedPolynomial<C>.degree: Int get() = coefficients.keys.maxOfOrNull { it.sum() }?.toInt() ?: -1
     /**
      * List that associates indices of variables (that appear in the polynomial in positive exponents) with their most
      * exponents in which the variables are appeared in the polynomial.
@@ -641,7 +640,7 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
      * As consequence all values in the list are non-negative integers. Also if the polynomial is constant, the list is empty.
      * And size of the list is [countOfVariables].
      */
-    val EnumeratedPolynomial<C>.degrees: List<UInt>
+    val NumberedPolynomial<C>.degrees: List<UInt>
         get() =
             buildList(countOfVariables) {
                 repeat(size) { add(0U) }
@@ -655,15 +654,15 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
     /**
      * Checks if the instant is constant polynomial (of degree no more than 0) over considered ring.
      */
-    override fun EnumeratedPolynomial<C>.isConstant(): Boolean =
+    override fun NumberedPolynomial<C>.isConstant(): Boolean =
         with(coefficients) { isEmpty() || size == 1 && entries.first().let { (key, _) -> key.isEmpty() } }
     /**
      * Checks if the instant is constant non-zero polynomial (of degree no more than 0) over considered ring.
      */
-    override fun EnumeratedPolynomial<C>.isNonZeroConstant(): Boolean =
+    override fun NumberedPolynomial<C>.isNonZeroConstant(): Boolean =
         with(coefficients) { size == 1 && entries.first().let { (key, _) -> key.isEmpty() } }
 
-    override fun EnumeratedPolynomial<C>.asConstantOrNull(): C? =
+    override fun NumberedPolynomial<C>.asConstantOrNull(): C? =
         with(coefficients) {
             when {
                 isEmpty() -> ring.zero
@@ -674,29 +673,29 @@ class EnumeratedPolynomialSpace<C, A : Ring<C>>(
 
     // TODO: Перенести в реализацию
     @Suppress("NOTHING_TO_INLINE")
-    inline fun EnumeratedPolynomial<C>.substitute(argument: Map<Int, C>): EnumeratedPolynomial<C> = this.substitute(ring, argument)
+    inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, C>): NumberedPolynomial<C> = this.substitute(ring, argument)
     @Suppress("NOTHING_TO_INLINE")
     @JvmName("substitutePolynomial")
-    inline fun EnumeratedPolynomial<C>.substitute(argument: Map<Int, EnumeratedPolynomial<C>>): EnumeratedPolynomial<C> = this.substitute(ring, argument)
+    inline fun NumberedPolynomial<C>.substitute(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = this.substitute(ring, argument)
 
     @Suppress("NOTHING_TO_INLINE")
-    inline fun EnumeratedPolynomial<C>.asFunction(): (Map<Int, C>) -> EnumeratedPolynomial<C> = { this.substitute(ring, it) }
+    inline fun NumberedPolynomial<C>.asFunction(): (Map<Int, C>) -> NumberedPolynomial<C> = { this.substitute(ring, it) }
     @Suppress("NOTHING_TO_INLINE")
-    inline fun EnumeratedPolynomial<C>.asFunctionOnConstants(): (Map<Int, C>) -> EnumeratedPolynomial<C> = { this.substitute(ring, it) }
+    inline fun NumberedPolynomial<C>.asFunctionOnConstants(): (Map<Int, C>) -> NumberedPolynomial<C> = { this.substitute(ring, it) }
     @Suppress("NOTHING_TO_INLINE")
-    inline fun EnumeratedPolynomial<C>.asFunctionOnPolynomials(): (Map<Int, EnumeratedPolynomial<C>>) -> EnumeratedPolynomial<C> = { this.substitute(ring, it) }
+    inline fun NumberedPolynomial<C>.asFunctionOnPolynomials(): (Map<Int, NumberedPolynomial<C>>) -> NumberedPolynomial<C> = { this.substitute(ring, it) }
 
     @Suppress("NOTHING_TO_INLINE")
-    inline operator fun EnumeratedPolynomial<C>.invoke(argument: Map<Int, C>): EnumeratedPolynomial<C> = this.substitute(ring, argument)
+    inline operator fun NumberedPolynomial<C>.invoke(argument: Map<Int, C>): NumberedPolynomial<C> = this.substitute(ring, argument)
     @Suppress("NOTHING_TO_INLINE")
     @JvmName("invokePolynomial")
-    inline operator fun EnumeratedPolynomial<C>.invoke(argument: Map<Int, EnumeratedPolynomial<C>>): EnumeratedPolynomial<C> = this.substitute(ring, argument)
+    inline operator fun NumberedPolynomial<C>.invoke(argument: Map<Int, NumberedPolynomial<C>>): NumberedPolynomial<C> = this.substitute(ring, argument)
     // endregion
 
     // region Legacy
     @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-    override inline fun add(left: EnumeratedPolynomial<C>, right: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> = left + right
+    override inline fun add(left: NumberedPolynomial<C>, right: NumberedPolynomial<C>): NumberedPolynomial<C> = left + right
     @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-    override inline fun multiply(left: EnumeratedPolynomial<C>, right: EnumeratedPolynomial<C>): EnumeratedPolynomial<C> = left * right
+    override inline fun multiply(left: NumberedPolynomial<C>, right: NumberedPolynomial<C>): NumberedPolynomial<C> = left * right
     // endregion
 }
