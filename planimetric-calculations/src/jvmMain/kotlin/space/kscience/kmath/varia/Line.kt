@@ -18,7 +18,6 @@ import kotlin.reflect.KProperty
  * @param y Coefficient before 'y' variable.
  * @param z Coefficient before 'z' variable.
  */
-@OptIn(UnstableKMathAPI::class)
 data class Line<C> (
     val x: LabeledPolynomial<C>,
     val y: LabeledPolynomial<C>,

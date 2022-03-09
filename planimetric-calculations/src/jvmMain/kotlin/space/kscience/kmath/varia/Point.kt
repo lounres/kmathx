@@ -1,12 +1,10 @@
 package space.kscience.kmath.varia
 
 import space.kscience.kmath.functions.*
-import space.kscience.kmath.misc.*
 import space.kscience.kmath.operations.*
 import kotlin.reflect.KProperty
 
 
-@OptIn(UnstableKMathAPI::class)
 data class Point<C> (
     val x: LabeledPolynomial<C>,
     val y: LabeledPolynomial<C>,
