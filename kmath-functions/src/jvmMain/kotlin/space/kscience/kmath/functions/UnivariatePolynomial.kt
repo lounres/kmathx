@@ -428,7 +428,6 @@ class UnivariatePolynomialSpace<C, A : Ring<C>>(
             }
         }
 
-    // TODO: Перенести в реализацию
     @Suppress("NOTHING_TO_INLINE")
     inline fun UnivariatePolynomial<C>.substitute(argument: C): C = this.substitute(ring, argument)
     @Suppress("NOTHING_TO_INLINE")
